@@ -122,6 +122,11 @@
                                         {{ session('success') }}
                                     </div>
                                 @endif
+                                @if (session('erro'))
+                                    <div class="alert alert-danger">
+                                        {{ session('erro') }}
+                                    </div>
+                                @endif
 
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>

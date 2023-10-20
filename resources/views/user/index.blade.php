@@ -124,6 +124,11 @@
                                         {{ session('success') }}
                                     </div>
                                 @endif
+                                @if (session('erro'))
+                                    <div class="alert alert-danger">
+                                        {{ session('erro') }}
+                                    </div>
+                                @endif
 
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
@@ -184,7 +189,6 @@
                         <div class="mb-3">
                             <label for="whatsapp" class="form-label">WhatsApp</label>
                             <input type="text" class="form-control" id="whatsapp" placeholder="(99) 9XXXX-XXXX" name="whatsapp" required>
-                            <span id="whatsapp-validation-message"></span>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Senha</label>
@@ -203,9 +207,8 @@
                 </form>
             </div>
         </div>
-    </div>
-    
+    </div>      
+        
 
-    
     
 </x-app-layout>

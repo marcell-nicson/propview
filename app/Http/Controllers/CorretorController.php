@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Corretor;
+use Doctrine\DBAL\Query\QueryException;
+use Illuminate\Database\QueryException as DatabaseQueryException;
 use Illuminate\Http\Request;
 
 class CorretorController extends Controller
@@ -38,26 +40,39 @@ class CorretorController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação dos dados (você pode adicionar as regras de validação necessárias aqui)
+       try {        
+            // Salva os dados do corretor no banco de dados
+            $corretor = new Corretor();
+            $corretor->nome = $request->nome;
+            $corretor->email = $request->email;
+            $corretor->whatsapp = $request->whatsapp;
+            $corretor->creci = $request->creci;
+            
+            // Salva a foto (você pode usar uma biblioteca como Intervention Image para lidar com o upload)
+            if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
+                $foto->move(public_path('fotos'), $nomeFoto);
+                $corretor->foto = $nomeFoto;
+            }
 
-        // Salva os dados do corretor no banco de dados
-        $corretor = new Corretor();
-        $corretor->nome = $request->nome;
-        $corretor->email = $request->email;
-        $corretor->whatsapp = $request->whatsapp;
-        $corretor->creci = $request->creci;
+            $corretor->save();
+            
+            return redirect()->route('corretor')->with('success', 'Corretor cadastrado com sucesso.');
+       } catch (DatabaseQueryException $e) {
+
+            $errorCode = $e->errorInfo[1];
         
-        // Salva a foto (você pode usar uma biblioteca como Intervention Image para lidar com o upload)
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('fotos'), $nomeFoto);
-            $corretor->foto = $nomeFoto;
-        }
+            if ($errorCode === 1062) {
+                if (str_contains($e->getMessage(), 'email_unique')) {
+                    return redirect()->route('corretor')->with('erro', 'Já existe um corretor com esse email.');
+                }
+            }        
+            return redirect()->route('corretor')->with('erro', 'Erro ao cadastrar o corretor: ' . $e->getMessage());
+       }       
+       
 
-        $corretor->save();
-
-        return redirect()->route('corretor')->with('success', 'Corretor cadastrado com sucesso.');
+       
     }
 
     /**
@@ -98,23 +113,36 @@ class CorretorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $corretor = Corretor::find($id);
+        try {
+            $corretor = Corretor::find($id);
     
-        if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('fotos'), $nomeFoto);
-            $corretor->foto = $nomeFoto; // Atualize o nome do arquivo da foto
-        }
+            if ($request->hasFile('foto')) {
+                $foto = $request->file('foto');
+                $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
+                $foto->move(public_path('fotos'), $nomeFoto);
+                $corretor->foto = $nomeFoto; // Atualize o nome do arquivo da foto
+            }
+            
+            $corretor->update([
+                'nome' => $request->nome,
+                'email' => $request->email,
+                'whatsapp' => $request->whatsapp,
+                // 'foto' => $request->foto, // Não é necessário atualizar a foto aqui
+            ]);
+            
+            return redirect()->route('corretor')->with('success', 'Corretor atualizado com sucesso!');
+        } catch (DatabaseQueryException $e) {
+
+            $errorCode = $e->errorInfo[1];
         
-        $corretor->update([
-            'nome' => $request->nome,
-            'email' => $request->email,
-            'whatsapp' => $request->whatsapp,
-            // 'foto' => $request->foto, // Não é necessário atualizar a foto aqui
-        ]);
+            if ($errorCode === 1062) {
+                if (str_contains($e->getMessage(), 'email_unique')) {
+                    return redirect()->route('corretor')->with('erro', 'Já existe um corretor com esse email.');
+                }
+            }        
+            return redirect()->route('corretor')->with('erro', 'Erro ao cadastrar o corretor: ' . $e->getMessage());
+        }       
         
-        return redirect()->route('corretor')->with('success', 'Corretor atualizado com sucesso!');
     }
 
     /**

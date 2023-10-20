@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Dotenv\Exception\ValidationException;
+use Illuminate\Database\QueryException as DatabaseQueryException;
 use GuzzleHttp\Client;
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException as ValidationValidationException;
 
 class UserController extends Controller
 {
@@ -20,22 +24,34 @@ class UserController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'whatsapp' => 'required', // Adicione as regras de validação necessárias para o campo WhatsApp
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'whatsapp' => $request->whatsapp,
-            'password' => bcrypt($request->password),
-        ]);
-
-        return redirect()->route('users')->with('success', 'Usuário criado com sucesso.');
+    {       
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users',
+                'whatsapp' => 'required', // Adicione as regras de validação necessárias para o campo WhatsApp
+                'password' => 'required|string|min:6|confirmed',
+            ]);
+    
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'whatsapp' => $request->whatsapp,
+                'password' => bcrypt($request->password),
+            ]);
+    
+            return redirect()->route('users')->with('success', 'Usuário criado com sucesso.');
+        } catch (ValidationValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            if ($errors->has('email')) {
+                return redirect()->route('corretor')->with('erro', 'Já existe um Usuário com esse email.');
+            }
+        
+            return redirect()->route('corretor')->with('erro', 'Erro ao cadastrar o Usuário.');
+        }
+        
+        
     }
 
     public function edit($id)
@@ -46,21 +62,31 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'whatsapp' => 'required', // Adicione as regras de validação necessárias para o campo WhatsApp
-        ]);
-
-        $user = User::findOrFail($id);
-
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'whatsapp' => $request->whatsapp,
-        ]);
-
-        return redirect()->route('users')->with('success', 'Usuário atualizado com sucesso!');
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users,email,' . $id,
+                'whatsapp' => 'required', // Adicione as regras de validação necessárias para o campo WhatsApp
+            ]);
+    
+            $user = User::findOrFail($id);
+    
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'whatsapp' => $request->whatsapp,
+            ]);
+    
+            return redirect()->route('users')->with('success', 'Usuário atualizado com sucesso!');
+        } catch (ValidationValidationException $e) {
+            $errors = $e->validator->errors();
+        
+            if ($errors->has('email')) {
+                return redirect()->route('corretor')->with('erro', 'Já existe um Usuário com esse email.');
+            }
+        
+            return redirect()->route('corretor')->with('erro', 'Erro ao cadastrar o Usuário.');
+        }        
     }
 
     public function destroy($id)

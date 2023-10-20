@@ -133,6 +133,11 @@
                                         {{ session('success') }}
                                     </div>
                                 @endif
+                                @if (session('erro'))
+                                    <div class="alert alert-danger">
+                                        {{ session('erro') }}
+                                    </div>
+                                @endif
                             </tbody>
                         </table>
                     @endif

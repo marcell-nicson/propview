@@ -35,4 +35,9 @@ class Imovel extends Model
     {
         return $this->hasMany(Visita::class);
     }
+    
+    public function photos()
+    {
+        return $this->hasMany(ImovelPhoto::class, 'imovel_id');
+    }
 }

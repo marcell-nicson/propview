@@ -95,6 +95,8 @@ Route::post('/users/store', [UserController::class, 'store'])->name('users.store
 Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/destroy/{visita}', [UserController::class, 'destroy'])->name('users.destroy');
 
+Route::resource('arquivos', ArquivoController::class);
+
 
 
 require __DIR__.'/auth.php';
