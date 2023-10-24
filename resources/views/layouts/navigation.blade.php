@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('users') }}">
                         <img src="{{ asset('fotos/logo.svg') }}"  class="block h-20 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
@@ -88,7 +88,7 @@
             <x-responsive-nav-link :href="route('users')" :active="request()->routeIs('users')">
                 {{ __('Usuários') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('corretor')" :active="request()->routeIs('corretor')">
                 {{ __('Corretores') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('cliente')" :active="request()->routeIs('cliente')">
@@ -100,7 +100,7 @@
             <x-responsive-nav-link :href="route('visita')" :active="request()->routeIs('visita')">
                 {{ __('Visitas') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                 {{ __('Calendário') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('arquivos')" :active="request()->routeIs('arquivos')">

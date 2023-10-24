@@ -1,10 +1,4 @@
 <x-app-layout>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -126,34 +120,7 @@
                                     <div class="alert alert-danger">
                                         {{ session('erro') }}
                                     </div>
-                                @endif
-
-                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                                <script>
-                                    $(document).ready(function() {
-                                        // Função de validação para email e whatsapp
-                                        function validateInput(inputField, regex, validationMessageId, validMessage, invalidMessage) {
-                                            inputField.on("input", function() {
-                                                if (regex.test($(this).val())) {
-                                                    $(validationMessageId).text(validMessage).css("color", "green");
-                                                } else {
-                                                    $(validationMessageId).text(invalidMessage).css("color", "red");
-                                                }
-                                            });
-                                        }
-                                
-                                        // Expressões regulares para email e whatsapp
-                                        var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-                                        var whatsappRegex = /^\(\d{2}\)\s9\d{4}-\d{4}$/;
-                                
-                                        // Validação de email
-                                        validateInput($("#email"), emailRegex, "#email-validation-message", "Formato de Email válido", "Formato de Email inválido");
-                                
-                                        // Validação de WhatsApp
-                                        validateInput($("#whatsapp"), whatsappRegex, "#whatsapp-validation-message", "Formato de WhatsApp válido", "Formato de WhatsApp inválido");
-                                    });
-                                </script>
-                                
+                                @endif                                
                             </tbody>
                         </table>
                     @endif

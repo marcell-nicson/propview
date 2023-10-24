@@ -39,7 +39,7 @@
         @if (Route::has('login'))
             <div>
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="link">Dashboard</a>
+                    <a href="{{ url('/users') }}" class="link">Painel</a>
                 @else
                     <a href="{{ route('login') }}" class="link large-text">Faça Login - </a> <!-- Aplicando estilo "large-text" -->
                     @if (Route::has('register'))
