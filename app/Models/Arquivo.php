@@ -9,5 +9,7 @@ class Arquivo extends Model
 {
     use HasFactory;
 
+    protected $table = 'arquivos';
+
     protected $fillable = ['titulo', 'descricao', 'tipo', 'url'];
 }

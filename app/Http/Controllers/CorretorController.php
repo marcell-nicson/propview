@@ -41,14 +41,13 @@ class CorretorController extends Controller
     public function store(Request $request)
     {
        try {        
-            // Salva os dados do corretor no banco de dados
+           
             $corretor = new Corretor();
             $corretor->nome = $request->nome;
             $corretor->email = $request->email;
             $corretor->whatsapp = $request->whatsapp;
-            $corretor->creci = $request->creci;
+            $corretor->creci = $request->creci;            
             
-            // Salva a foto (você pode usar uma biblioteca como Intervention Image para lidar com o upload)
             if ($request->hasFile('foto')) {
                 $foto = $request->file('foto');
                 $nomeFoto = time() . '.' . $foto->getClientOriginalExtension();
@@ -127,7 +126,7 @@ class CorretorController extends Controller
                 'nome' => $request->nome,
                 'email' => $request->email,
                 'whatsapp' => $request->whatsapp,
-                // 'foto' => $request->foto, // Não é necessário atualizar a foto aqui
+
             ]);
             
             return redirect()->route('corretor')->with('success', 'Corretor atualizado com sucesso!');

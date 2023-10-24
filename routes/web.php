@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArquivoController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CorretorController;
@@ -77,6 +78,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    
 });
 
 Route::post('/geocode', [GeocodeController::class, 'geocode']);
@@ -95,7 +98,16 @@ Route::post('/users/store', [UserController::class, 'store'])->name('users.store
 Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/destroy/{visita}', [UserController::class, 'destroy'])->name('users.destroy');
 
-Route::resource('arquivos', ArquivoController::class);
+Route::get('/arquivos', [ArquivoController::class, 'index'])
+->middleware(['auth', 'verified'])
+->name('arquivos');
+
+Route::get('/arquivos/create', [ArquivoController::class, 'create'])->name('arquivos.create');
+Route::post('/arquivos/store', [ArquivoController::class, 'store'])->name('arquivos.store');
+Route::put('/arquivos/update/{id}', [ArquivoController::class, 'update'])->name('arquivos.update');
+Route::delete('/arquivos/destroy/{arquivo}', [ArquivoController::class, 'destroy'])->name('arquivos.destroy');
+
+
 
 
 

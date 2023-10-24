@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Arquivo;
+use Exception;
 
 class ArquivoController extends Controller
 {
@@ -22,25 +23,60 @@ class ArquivoController extends Controller
 
     public function store(Request $request)
     {
-        // Valide e armazene o arquivo enviado
-        $request->validate([
-            'arquivo' => 'required|file|mimes:pdf,docx,doc|max:2048',
-        ]);
+        
+        try {
 
-        if ($request->hasFile('arquivo')) {
-            $path = $request->file('arquivo')->store('arquivos');
-            $arquivo = new Arquivo([
-                'titulo' => $request->input('titulo'),
-                'descricao' => $request->input('descricao'),
-                'url' => $path,
+            $request->validate([
+                'arquivo' => 'required|file|max:2048',
             ]);
+    
+            if ($request->hasFile('arquivo')) {
+                $path = $request->file('arquivo')->store('arquivos');
+                $arquivo = new Arquivo([
+                    'titulo' => $request->input('titulo'),
+                    'descricao' => $request->input('descricao'),
+                    'url' => $path,
+                ]);
+                $arquivo->save();
+    
+                return redirect()->route('arquivos')
+                    ->with('success', 'Arquivo enviado com sucesso.');
+            }
+    
+            return back()->with('error', 'Erro ao enviar o arquivo.');
+        } catch (Exception $e) {
+
+            info($e->getMessage());
+        }
+       
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'arquivo' => 'nullable|file|max:2048',
+            ]);
+           
+            $arquivo = Arquivo::findOrFail($id);
+
+            if ($request->hasFile('arquivo')) {
+               
+                $path = $request->file('arquivo')->store('arquivos');
+                $arquivo->url = $path;
+            }
+           
+            $arquivo->titulo = $request->input('titulo');
+            $arquivo->descricao = $request->input('descricao');
+
             $arquivo->save();
 
-            return redirect()->route('arquivos.index')
-                ->with('success', 'Arquivo enviado com sucesso.');
+            return redirect()->route('arquivos')
+                ->with('success', 'Arquivo atualizado com sucesso.');
+        } catch (Exception $e) {
+            info($e->getMessage());
+            return back()->with('error', 'Erro ao atualizar o arquivo.');
         }
-
-        return back()->with('error', 'Erro ao enviar o arquivo.');
     }
 
     public function show($id)
@@ -49,4 +85,14 @@ class ArquivoController extends Controller
 
         return response()->file(storage_path("app/{$arquivo->url}"));
     }
+
+    public function destroy($id)
+    {
+        $arquivo = Arquivo::find($id);
+        $arquivo->delete();
+       
+        return redirect()->route('arquivos')->with('success', 'Arquivo deletado com sucesso!');
+    }
+
+    
 }
