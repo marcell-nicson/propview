@@ -109,6 +109,11 @@ Route::delete('/arquivos/destroy/{arquivo}', [ArquivoController::class, 'destroy
 
 
 
+Route::get('/exibir-foto/{fotoId}', [ImovelController::class, 'exibirFoto'])->name('exibir-foto');
+Route::post('/excluir-foto/{fotoId}', [ImovelController::class, 'excluirFoto'])->name('excluir-foto');
+
+
+
 
 
 require __DIR__.'/auth.php';

@@ -39,6 +39,11 @@
                                         <td class="text-sm">{{ $imovel->endereco }}</td>
                                         <td class="text-sm">{{ $imovel->latitude }}</td>
                                         <td class="text-sm">{{ $imovel->longitude }}</td>
+                                        <td> 
+                                            <a type="button" data-toggle="modal" data-target="#fotosImovelModal{{ $imovel->id }}">
+                                                <i class="fa-regular fa-image" style="color: #146c19; font-size: 20px;"></i>
+                                            </a>
+                                        </td>
                                         <td>
                                             <a href="#" data-toggle="modal" data-target="#editarimovelModal{{ $imovel->id }}">
                                                 <i class="fas fa-edit" style="color: #2a45cc; font-size: 20px;"></i>
@@ -49,9 +54,8 @@
                                                 <i class="fa-solid fa-trash" style="color: #df1616; font-size: 20px;"></i>
                                             </a>
                                         </td>
-                                    </tr>                               
-                                    
-                                        <div class="modal fade" id="excluirimovelModal{{ $imovel->id }}" tabindex="-1" role="dialog" aria-labelledby="excluirimovelModal{{ $imovel->id }}Label" aria-hidden="true">
+                                    </tr>                                    
+                                    <div class="modal fade" id="excluirimovelModal{{ $imovel->id }}" tabindex="-1" role="dialog" aria-labelledby="excluirimovelModal{{ $imovel->id }}Label" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -104,6 +108,18 @@
                                                             </select>
                                                         </div>
                                                         <div class="mb-3">
+                                                            <label for="fotos" class="form-label">Incluir Fotos</label>
+                                                            <input type="file" class="form-control" id="fotos" name="fotos[]" multiple>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="titulo_foto" class="form-label">Título da Foto</label>
+                                                            <input type="text" class="form-control" id="titulo_foto" name="titulo_foto">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="descricao_foto" class="form-label">Descrição da Foto</label>
+                                                            <textarea class="form-control" id="descricao_foto" name="descricao_foto" rows="2"></textarea>
+                                                        </div>                                                     
+                                                        <div class="mb-3">
                                                             <label for="endereco" class="form-label">Endereço</label>
                                                             <input type="text" class="form-control" id="endereco" value="{{ $imovel->endereco }}" placeholder="Rua. Joaquim Nabuco, Mossoró - RN, 59600-300" name="endereco" required>
                                                         </div>
@@ -123,13 +139,47 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </div>                                
+                                    </div>
+                              
+
+                                    <!-- Modal para exibir as fotos -->
+                                    <div class="modal fade" id="fotosImovelModal{{ $imovel->id }}" tabindex="-1" role="dialog" aria-labelledby="fotosImovelModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="fotosImovelModalLabel">Fotos do Imóvel</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">                                                    
+                                                    <div class="row">
+                                                        @foreach ($imovel->photos as $foto)
+                                                            <div class="col-4">                                                                
+                                                                <img src="{{ route('exibir-foto', $foto->id) }}" class="img-fluid" alt="{{ $foto->titulo }}">
+                                                                <p>{{ $foto->descricao }}</p>
+                                                                <button type="button" class="btn btn-danger btn-sm excluir-foto" data-foto-id="{{ $foto->id }}">
+                                                                    Excluir
+                                                                </button>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 @endforeach
                                 @if (session('success'))
                                     <div class="alert alert-success">
                                         {{ session('success') }}
                                     </div>
                                 @endif
+
 
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                                 <script>
@@ -156,7 +206,33 @@
                                         validateInput($("#whatsapp"), whatsappRegex, "#whatsapp-validation-message", "Formato de WhatsApp válido", "Formato de WhatsApp inválido");
                                     });
                                 </script>
-                                
+
+                                <script>
+                                    $(document).ready(function() {
+                                        $('.excluir-foto').on('click', function() {
+                                            var fotoId = $(this).data('foto-id');
+
+                                            // Exiba um modal de confirmação antes de excluir a foto
+                                            if (confirm('Tem certeza de que deseja excluir esta foto?')) {
+                                                // Faça uma solicitação AJAX para excluir a foto
+                                                $.ajax({
+                                                    type: 'POST',
+                                                    url: '/excluir-foto/' + fotoId, // Substitua pelo URL real de exclusão
+                                                    data: {
+                                                        _token: '{{ csrf_token() }}', // Se estiver usando o Laravel
+                                                    },
+                                                    success: function(response) {
+                                                        // Atualize o modal após a exclusão
+                                                        $('#fotosImovelModal{{ $imovel->id }}').modal('hide');
+                                                    },
+                                                    error: function() {
+                                                        alert('Erro ao excluir a foto.');
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    });
+                                </script>
                             </tbody>
                         </table>
                     @endif
@@ -186,6 +262,24 @@
                             <label for="descricao" class="form-label">Descrição</label>                            
                             <textarea  class="form-control"  id="descricao" name="descricao" rows="4" required> </textarea>
                         </div>
+                        <!-- Campos para adicionar fotos -->
+                        <div class="mb-3">
+                            <label for="fotos" class="form-label">Fotos</label>
+                            <input type="file" class="form-control" id="fotos" name="fotos[]" multiple>
+                        </div>
+
+                        <!-- Campo para o título da foto -->
+                        <div class="mb-3">
+                            <label for="titulo_foto" class="form-label">Título da Foto</label>
+                            <input type="text" class="form-control" id="titulo_foto" name="titulo_foto">
+                        </div>
+
+                        <!-- Campo para a descrição da foto -->
+                        <div class="mb-3">
+                            <label for="descricao_foto" class="form-label">Descrição da Foto</label>
+                            <textarea class="form-control" id="descricao_foto" name="descricao_foto" rows="2"></textarea>
+                        </div>
+
                         <div class="mb-3">
                             <label for="tipo_negocio" class="form-label">Tipo de Negócio:</label>
                             <select class="form-control" id="tipo_negocio" name="tipo_negocio" required>

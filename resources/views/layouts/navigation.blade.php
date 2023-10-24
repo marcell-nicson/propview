@@ -30,6 +30,9 @@
                     <x-nav-link :href="route('calendario')" :active="request()->routeIs('calendario')">
                         {{ __('Calendário') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('arquivos')" :active="request()->routeIs('arquivos')">
+                        {{ __('Arquivos') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -99,6 +102,9 @@
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Calendário') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('arquivos')" :active="request()->routeIs('arquivos')">
+                {{ __('Arquivos') }}
             </x-responsive-nav-link>
         </div>
 
