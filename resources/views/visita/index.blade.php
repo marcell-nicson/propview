@@ -135,12 +135,15 @@
                                     </div>                                
                                 @endforeach
                                 @if (session('success'))
-                                    <div class="alert alert-success">
-                                        {{ session('success') }}
-                                    </div>
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
                                 @endif
-
-                                                                
+                                @if (session('erro'))
+                                    <div class="alert alert-danger">
+                                        {{ session('erro') }}
+                                    </div>
+                                @endif                                                                
                             </tbody>
                         </table>
                     @endif
@@ -207,48 +210,5 @@
         </div>
     </div>
 
-
-
-
-  <div id='calendar'></div>
-
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.9.0/main.js'></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        events: [
-          // Aqui você deve fornecer uma lista de eventos (visitas) com datas, títulos e cores de acordo com o status.
-          // Por exemplo:
-          {
-            title: 'Visita 1',
-            start: '2023-10-01',
-            end: '2023-10-01',
-            color: 'green' // Visita realizada (verde)
-          },
-          {
-            title: 'Visita 2',
-            start: '2023-10-02',
-            end: '2023-10-02',
-            color: 'gray' // Visita não realizada (cinza)
-          },
-          {
-            title: 'Visita 3',
-            start: '2023-10-03',
-            end: '2023-10-03',
-            color: 'blue' // Visita agendada (azul)
-          },
-          // Adicione mais eventos aqui...
-        ]
-      });
-      calendar.render();
-    });
-  </script>
-
-
-    
+   
 </x-app-layout>

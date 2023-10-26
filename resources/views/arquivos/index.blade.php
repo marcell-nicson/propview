@@ -107,18 +107,17 @@
                                         </div>
                                     </div>                                
                                 @endforeach
-                                @if (session('success'))
-                                    <div class="alert alert-success">
-                                        {{ session('success') }}
-                                    </div>
-                                @endif
-                                @if (session('erro'))
-                                    <div class="alert alert-danger">
-                                        {{ session('erro') }}
-                                    </div>
-                                @endif                               
-                                
                             </tbody>
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                            @if (session('erro'))
+                                <div class="alert alert-danger">
+                                    {{ session('erro') }}
+                                </div>
+                            @endif
                         </table>
                     @endif
                 </div>
