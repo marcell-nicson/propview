@@ -11,6 +11,7 @@ class ClienteController extends Controller
     public function index()
     {
         $clientes = Cliente::all();
+        
         return view('cliente.index', compact('clientes'));
     }
 
@@ -22,19 +23,16 @@ class ClienteController extends Controller
     public function store(Request $request)
     {
         try {
+
             $validatedData = $request->validate([
                 'nome' => 'required|string|max:255',
                 'email' => 'required|email',
                 'whatsapp' => 'required|string',
                 'endereco' => 'required|string',
+                'nascimento' => 'nullable|date',
             ]);
     
-            $cliente = Cliente::create([
-                'nome' => $request->nome,
-                'email' => $request->email,
-                'whatsapp' => $request->whatsapp,
-                'endereco' => $request->endereco,
-            ]);
+            $cliente = Cliente::create($request->all());
     
             return redirect()->route('cliente')->with('success', 'Cliente criado com sucesso.');
 
@@ -66,16 +64,12 @@ class ClienteController extends Controller
                 'email' => 'required|email',
                 'whatsapp' => 'required|string',
                 'endereco' => 'required|string',
+                'nascimento' => 'nullable|date',
             ]);
     
             $cliente = Cliente::findOrFail($id);
     
-            $cliente->update([
-                'nome' => $request->nome,
-                'email' => $request->email,
-                'whatsapp' => $request->whatsapp,
-                'endereco' => $request->endereco,
-            ]);
+            $cliente->update($request->all());
     
             return redirect()->route('cliente')->with('success', 'Cliente atualizado com sucesso!');
         } catch (DatabaseQueryException $e) {

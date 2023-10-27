@@ -11,7 +11,7 @@ class Cliente extends Model
     
     protected $table = 'clients';
 
-    protected $fillable = ['nome', 'email', 'whatsapp', 'endereco'];
+    protected $fillable = ['nome', 'email', 'whatsapp', 'endereco', 'nascimento'];
     
     protected $dates = [
         'created_at',

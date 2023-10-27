@@ -17,9 +17,10 @@
                             <thead>
                                 <tr>                                    
                                     <th class="text-sm">Nome</th>
+                                    <th class="text-sm">Data de Nascimento</th>
                                     <th class="text-sm">Email</th>
                                     <th class="text-sm">WhatsApp</th>
-                                    <th class="text-sm">Endereço</th>
+                                    <th class="text-sm">Endereço</th>                                    
                                     <th></th>
                                     <th></th>
                                 </tr>
@@ -29,10 +30,11 @@
                                     <tr>
                                         <td class="text-sm">
                                             {{ $cliente->id . ' - ' }} {{ $cliente->nome }}
-                                        </td>
-                                        <td class="text-sm">{{ $cliente->email }}</td>
+                                        </td>                                        
+                                        <td class="text-sm">{{ $cliente->nascimento }}</td>
+                                        <td class="text-sm">{{ $cliente->email }}</td>                                        
                                         <td class="text-sm">{{ $cliente->whatsapp }}</td>
-                                        <td class="text-sm">{{ $cliente->endereco }}</td>
+                                        <td class="text-sm">{{ $cliente->endereco }}</td>                                        
                                         <td>
                                             <a href="#" data-toggle="modal" data-target="#editarClienteModal{{ $cliente->id }}">
                                                 <i class="fas fa-edit" style="color: #2a45cc; font-size: 20px;"></i>
@@ -85,6 +87,10 @@
                                                         <div class="form-group">
                                                             <label for="nome">Nome</label>
                                                             <input type="text" class="form-control" id="nome" name="nome" value="{{ $cliente->nome }}" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="nascimento" class="form-label">Data de Nascimento</label>
+                                                            <input type="date" class="form-control" id="nascimento" name="nascimento">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="email">Email</label>
@@ -145,6 +151,10 @@
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome</label>
                             <input type="text" class="form-control" id="nome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nascimento" class="form-label">Data de Nascimento</label>
+                            <input type="date" class="form-control" id="nascimento" name="nascimento">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>

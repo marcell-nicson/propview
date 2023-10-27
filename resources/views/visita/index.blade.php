@@ -90,7 +90,7 @@
                                                        
                                                         <div class="form-group">
                                                             <label for="corretor_id">Corretor</label>
-                                                            <select name="corretor_id" id="corretor_id" class="form-control" required>
+                                                            <select name="corretor_id" id="corretor_id" class="form-control select 2" required>
                                                                 @foreach ($corretores as $corretor)
                                                                     <option value="{{ $corretor->id }}" @if($visita->corretor_id == $corretor->id) selected @endif>{{ $corretor->nome }}</option>
                                                                 @endforeach

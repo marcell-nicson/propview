@@ -2,8 +2,11 @@
 
 namespace App\Console;
 
+use App\Mail\HelloMail;
+use App\Models\Cliente;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,10 +17,11 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
+    {   
+        $schedule->command('processar:aniversarioclientes')
+            ->dailyAt('13:45');
+        
     }
-
     /**
      * Register the commands for the application.
      *
@@ -26,6 +30,10 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
+
+        $this->commands([
+            Commands\AniversarioClientes::class,
+        ]);
 
         require base_path('routes/console.php');
     }
