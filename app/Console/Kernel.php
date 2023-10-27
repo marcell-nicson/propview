@@ -18,9 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {   
-        $schedule->command('processar:aniversarioclientes')
-            ->dailyAt('13:45');
-        
+        $schedule->command('processar:aniversarioclientes')->dailyAt('09:00'); // 07:00-AM EM UTC
     }
     /**
      * Register the commands for the application.
@@ -30,10 +28,6 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
-
-        $this->commands([
-            Commands\AniversarioClientes::class,
-        ]);
 
         require base_path('routes/console.php');
     }

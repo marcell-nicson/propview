@@ -29,12 +29,12 @@ class AniversarioClientes extends Command
      * @return int
      */
     public function handle()
-    {
-   
+    {               
+
         $clientes = Cliente::whereMonth('nascimento', '=', now()->month)
             ->whereDay('nascimento', '=', now()->day)
-            ->get();            
-
+            ->get(); 
+       
        
         foreach ($clientes as $cliente) {                                        
 
