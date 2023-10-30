@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {   
-        $schedule->command('processar:aniversarioclientes')->dailyAt('09:00'); // 07:00-AM EM UTC
+        $schedule->command('processar:aniversarioclientes')->dailyAt('09:00'); // 07:00-AM EM UTC  executar localmente para verificar o comando php artisan schedule:work
     }
     /**
      * Register the commands for the application.

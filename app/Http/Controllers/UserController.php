@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Dotenv\Exception\ValidationException;
-use Illuminate\Database\QueryException as DatabaseQueryException;
-use GuzzleHttp\Client;
-use Illuminate\Database\QueryException;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException as ValidationValidationException;
 
 class UserController extends Controller
@@ -26,19 +28,22 @@ class UserController extends Controller
     public function store(Request $request)
     {       
         try {
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:users',
-                'whatsapp' => 'required', // Adicione as regras de validação necessárias para o campo WhatsApp
-                'password' => 'required|string|min:6|confirmed',
+
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+                'whatsapp' => 'required', 
+                'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
     
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'whatsapp' => $request->whatsapp,
-                'password' => bcrypt($request->password),
+                'password' => Hash::make($request->password),
             ]);
+
+            event(new Registered($user));
     
             return redirect()->route('users')->with('success', 'Usuário criado com sucesso.');
         } catch (ValidationValidationException $e) {
