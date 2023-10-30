@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\ProcessarEnvioEmail;
 use App\Mail\HelloMail;
 use App\Models\Cliente;
 use App\Models\Corretor;
@@ -30,7 +31,7 @@ class VisitaController extends Controller
 
         return view('visita.create', compact('corretores', 'clientes', 'imoveis'));
     }
-
+  
     public function store(Request $request)
     {
         $request->validate([
@@ -47,7 +48,7 @@ class VisitaController extends Controller
         $emailcorretor = $visita->corretor->email ? $visita->corretor->email : null;
         $emailcliente = $visita->cliente->email ? $visita->cliente->email : null;
 
-        $dataVisita = \Carbon\Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');
+        $dataVisita = \Carbon\Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');        
 
         if ($visita and $emailcorretor != null) {           
 
@@ -56,18 +57,17 @@ class VisitaController extends Controller
             ' com o cliente: ' . $visita->cliente->nome . 
             ' no endereço: ' . $visita->imovel->endereco;
         
-            Mail::to($emailcorretor)->send(new HelloMail($titulo, $mensagem));                   
-
+            dispatch(new ProcessarEnvioEmail($emailcorretor, $titulo, $mensagem))->onQueue('low');
         }
+
         if($visita and $emailcliente != null){
 
             $titulo = 'Olá, '. $visita->cliente->nome .' há nova visita para você!';
             $mensagem = 'Sua visita está agendada para: ' . $dataVisita . 
             ' com o Corretor ' . $visita->corretor->nome . 
             ' no endereço: ' . $visita->imovel->endereco;
-
-            Mail::to($emailcliente)->send(new HelloMail($titulo, $mensagem));
-        
+       
+            dispatch(new ProcessarEnvioEmail($emailcliente, $titulo, $mensagem))->onQueue('low');
         }
 
         return redirect()->route('visita')
