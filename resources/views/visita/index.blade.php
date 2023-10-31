@@ -166,7 +166,7 @@
                         @csrf
                         <div class="form-group">
                             <label for="corretor_id">Corretor</label>
-                            <select name="corretor_id" id="corretor_id" class="form-control" required>
+                            <select name="corretor_id" id="corretor_id" style="width:470px" class="form-control escolha" required>
                                 @foreach ($corretores as $corretor)
                                     <option value="{{ $corretor->id }}">{{ $corretor->nome }}</option>
                                 @endforeach
@@ -174,7 +174,7 @@
                         </div>
                         <div class="form-group">
                             <label for="cliente_id">Cliente</label>
-                            <select name="cliente_id" id="cliente_id" class="form-control" required>
+                            <select name="cliente_id" id="cliente_id" style="width:470px" class="form-control escolha" required>
                                 @foreach ($clientes as $cliente)
                                     <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
                                 @endforeach
@@ -182,7 +182,7 @@
                         </div>
                         <div class="form-group">
                             <label for="imovel_id">Imóvel</label>
-                            <select name="imovel_id" id="imovel_id" class="form-control" required>
+                            <select name="imovel_id" id="imovel_id" style="width:470px" class="form-control escolha" required>
                                 @foreach ($imoveis as $imovel)
                                     <option value="{{ $imovel->id }}">{{ $imovel->titulo }}</option>
                                 @endforeach
@@ -210,5 +210,19 @@
         </div>
     </div>
 
+
+    <x-slot name="js">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+            <script>
+                $(document).ready(function() {
+                    $('.escolha').select2({
+                        dropdownParent: $('#modalvisita')
+                    });
+                });
+            </script>
+
+    </x-slot>
    
 </x-app-layout>

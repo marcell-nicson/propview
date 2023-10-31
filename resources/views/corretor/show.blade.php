@@ -43,12 +43,12 @@
                                     <td> {{ $corretor->creci }}</td>
                                     <td> 
                                         <a href="#" data-toggle="modal" data-target="#editarCorretorModal{{ $corretor->id }}">
-                                            <i class="fas fa-edit" style="color: #2a45cc;"></i>
+                                            <i class="fas fa-edit" style="color: #2a45cc; font-size: 20px;"></i>
                                         </a>
                                     </td>
                                     <td>  
                                         <a href="#" data-toggle="modal" data-target="#excluirCorretorModal{{ $corretor->id }}">
-                                            <i class="fa-solid fa-trash" style="color: #df1616;"></i>
+                                            <i class="fa-solid fa-trash" style="color: #df1616; font-size: 20px;"></i>
                                         </a>
                                     </td>
                                 </tr>
