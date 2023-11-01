@@ -90,7 +90,7 @@
                                                        
                                                         <div class="form-group">
                                                             <label for="corretor_id">Corretor</label>
-                                                            <select name="corretor_id" id="corretor_id" class="form-control select 2" required>
+                                                            <select name="corretor_id" id="corretor_id" class="form-control escolha1" required>
                                                                 @foreach ($corretores as $corretor)
                                                                     <option value="{{ $corretor->id }}" @if($visita->corretor_id == $corretor->id) selected @endif>{{ $corretor->nome }}</option>
                                                                 @endforeach
@@ -98,7 +98,7 @@
                                                         </div> 
                                                         <div class="form-group">
                                                             <label for="cliente_id">Cliente</label>
-                                                            <select name="cliente_id" id="cliente_id" class="form-control" required>
+                                                            <select name="cliente_id" id="cliente_id" class="form-control escolha1" required>
                                                                 @foreach ($clientes as $cliente)
                                                                     <option value="{{ $cliente->id }}" @if($visita->cliente_id == $cliente->id) selected @endif>{{ $cliente->nome }}</option>
                                                                 @endforeach
@@ -106,7 +106,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="imovel_id">Imóvel</label>
-                                                            <select name="imovel_id" id="imovel_id" class="form-control" required>
+                                                            <select name="imovel_id" id="imovel_id" class="form-control escolha1" required>
                                                                 @foreach ($imoveis as $imovel)
                                                                     <option value="{{ $imovel->id }}" @if($visita->imovel_id == $imovel->id) selected @endif>{{ $imovel->titulo }}</option>
                                                                 @endforeach
@@ -132,7 +132,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>                                
+                                    </div>
+                                                                    
+                                    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('.escolha1').select2({
+                                                dropdownParent: $('#editarvisitaModal')
+                                            });
+                                        });
+                                    </script>
+                                                               
                                 @endforeach
                                 @if (session('success'))
                                 <div class="alert alert-success">
@@ -143,7 +154,7 @@
                                     <div class="alert alert-danger">
                                         {{ session('erro') }}
                                     </div>
-                                @endif                                                                
+                                @endif 
                             </tbody>
                         </table>
                     @endif
@@ -209,7 +220,6 @@
             </div>
         </div>
     </div>
-
 
     <x-slot name="js">
 

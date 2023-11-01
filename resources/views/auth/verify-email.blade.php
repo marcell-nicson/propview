@@ -13,6 +13,11 @@
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
 
+            <div class="mb-4">
+                <label for="verification_code" class="block text-sm font-medium text-gray-700">Informe o Código de Verificação</label>
+                <input type="text" name="verification_code" id="verification_code" class="mt-1 p-2 border rounded-md" required> OU
+            </div>
+
             <div>
                 <x-primary-button>
                     {{ __('Reenviar email de verificação') }}
