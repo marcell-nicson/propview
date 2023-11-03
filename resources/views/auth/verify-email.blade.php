@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
-        {{ __('Obrigado por inscrever-se! Antes de começar, você poderia verificar seu endereço de e-mail clicando no link que acabamos de enviar para você? Se você não recebeu o e-mail, teremos prazer em lhe enviar outro.') }}
+        {{ __('Obrigado por se inscrever! Antes de começar, você poderia verificar seu endereço de e-mail clicando no link que acabamos de enviar para você? Se você não recebeu o e-mail, teremos prazer em lhe enviar outro.') }}
     </div>
 
     @if (session('status') == 'verification-link-sent')
@@ -9,28 +9,44 @@
         </div>
     @endif
 
-    <div class="mt-4 flex items-center justify-between">
+    @if (session('status') == 'verification-link-erro')
+        <div class="mb-4 font-medium text-sm text-red-600">
+            {{ __('Seu código de verificação expirou.') }}
+        </div>
+    @endif
+
+    <div class="">        
+        
+        <form method="POST" action="{{ route('verify-email') }}">
+            @csrf
+            <div class="mb-4">
+                <label for="verification_code" class="block text-sm font-medium text-gray-700">Código de Verificação</label>
+                <input type="text" name="verification_code" id="verification_code" class="mt-1 p-2 border rounded-md" required>
+            </div>
+
+            <x-primary-button>
+                {{ __('Confirmar Código') }}
+            </x-primary-button>
+        </form>
+
+        <p class="mt-2 text-gray-600">
+            {{ __('OU') }}
+        </p>
+
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
-
-            <div class="mb-4">
-                <label for="verification_code" class="block text-sm font-medium text-gray-700">Informe o Código de Verificação</label>
-                <input type="text" name="verification_code" id="verification_code" class="mt-1 p-2 border rounded-md" required> OU
-            </div>
-
-            <div>
-                <x-primary-button>
-                    {{ __('Reenviar email de verificação') }}
-                </x-primary-button>
-            </div>
+            <x-primary-button>
+                {{ __('Reenviar Código via Email') }}
+            </x-primary-button>
         </form>
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <button type="submit" class="underline text-sm text-gray-500 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 {{ __('Sair') }}
             </button>
-        </form>
+        </form>      
+
     </div>
+    
 </x-guest-layout>

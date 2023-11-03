@@ -1,54 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f4f6;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .link {
-            text-decoration: none;
-            color: #3490dc;
-        }
-
-        .link:hover {
-            text-decoration: underline;
-        }
-
-        .version {
-            font-size: 12px;
-            color: #9ca3af;
-        }
-
-        .large-text {
-            font-size: 24px; /* Defina o tamanho da fonte desejado */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Já tem uma conta ?</h1>
-        @if (Route::has('login'))
-            <div>
+<x-guest-layout>
+    <!DOCTYPE html>
+    <html>
+    <head>
+    </head>
+    <body>
+        <div class="container">
+            @if (Route::has('login'))
                 @auth
                     <a href="{{ url('/users') }}" class="link">Painel</a>
                 @else
-                    <a href="{{ route('login') }}" class="link large-text">Faça Login - </a> <!-- Aplicando estilo "large-text" -->
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="link large-text">Registre-se</a> <!-- Aplicando estilo "large-text" -->
-                    @endif
+                    <div style="text-align: center;">
+                        <h1>Já tem uma conta ?</h1>
+                        <a href="{{ route('login') }}" class="link large-text">
+                            <x-primary-button class="ml-8">
+                                {{ __('Faça Login') }}
+                            </x-primary-button>
+                        </a>
+                        <a> OU </a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="link large-text">
+                                <x-primary-button class="ml-8">
+                                    {{ __('Registre-se') }}
+                                </x-primary-button>
+                            </a>
+                        @endif
+                    </div>
                 @endauth
-            </div>
-        @endif
-        <p class="version">Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})</p>
-    </div>
-</body>
-</html>
+            @endif
+            <p class="version">Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})</p>
+        </div>
+    </body>
+    </html>
+</x-guest-layout>

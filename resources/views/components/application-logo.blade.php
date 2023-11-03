@@ -1,1 +1,1 @@
-<img src="{{ asset('fotos/logo.svg') }}"  class="block h-60 w-auto fill-current text-gray-600" />
+<img src="{{ asset('fotos/logo.svg') }}" class="w-full sm:max-w-md mt-10 overflow-hidden sm:rounded-lg" />
