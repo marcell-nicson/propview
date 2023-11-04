@@ -35,12 +35,14 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'whatsapp' => 'required', 
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'whatsapp' => $request->whatsapp,
             'password' => Hash::make($request->password),
         ]);
 
@@ -49,7 +51,7 @@ class RegisteredUserController extends Controller
         $codigo = random_int(111111, 999999);
 
         Redis::set('chave:' . $user->id, $codigo);
-        Redis::expire('chave:'. $user->id , 90);
+        Redis::expire('chave:'. $user->id , 900);
 
         $titulo = 'Prezado(a) '. $user->name .' Verifique seu Email';
         $mensagem = 'Seu Codigo de verificação é ' . $codigo;

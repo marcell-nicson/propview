@@ -49,7 +49,7 @@ class UserController extends Controller
             
             $codigo = random_int(111111, 999999);
             Redis::set('chave:' . $user->id, $codigo);
-            Redis::expire('chave:'. $user->id , 90);
+            Redis::expire('chave:'. $user->id , 900);
 
             $titulo = 'Prezado(a) '. $user->name .' Verifique seu Email';
             $mensagem = 'Seu Codigo de verificação é ' . $codigo;

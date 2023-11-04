@@ -52,7 +52,12 @@ class VerifyEmailController extends Controller
 
         }elseif($chave === null){
             
+            return back()->with('status', 'verification-link-null');
+
+        }else{
+
             return back()->with('status', 'verification-link-erro');
+
         }
 
         return redirect()->back();

@@ -9,19 +9,24 @@
         </div>
     @endif
 
-    @if (session('status') == 'verification-link-erro')
+    @if (session('status') == 'verification-link-null')
         <div class="mb-4 font-medium text-sm text-red-600">
             {{ __('Seu código de verificação expirou.') }}
         </div>
     @endif
+    @if (session('status') == 'verification-link-erro')
+        <div class="mb-4 font-medium text-sm text-red-600">
+            {{ __('Seu código de verificação é inválido.') }}
+        </div>
+    @endif
 
-    <div class="">        
+    <div style="text-align: center;" >        
         
         <form method="POST" action="{{ route('verify-email') }}">
             @csrf
             <div class="mb-4">
                 <label for="verification_code" class="block text-sm font-medium text-gray-700">Código de Verificação</label>
-                <input type="text" name="verification_code" id="verification_code" class="mt-1 p-2 border rounded-md" required>
+                <input placeholder="Insira seu codigo" type="number" name="verification_code" id="verification_code" class="mt-1 p-2 border rounded-md" required>
             </div>
 
             <x-primary-button>
@@ -33,7 +38,7 @@
             {{ __('OU') }}
         </p>
 
-        <form method="POST" action="{{ route('verification.send') }}">
+        <form class="mt-2"  method="POST" action="{{ route('verification.send') }}">
             @csrf
             <x-primary-button>
                 {{ __('Reenviar Código via Email') }}
