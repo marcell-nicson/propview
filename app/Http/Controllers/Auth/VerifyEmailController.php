@@ -50,11 +50,15 @@ class VerifyEmailController extends Controller
                 
             return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
 
-        }elseif($chave === null){
+        }
+
+        if($chave === null){
             
             return back()->with('status', 'verification-link-null');
 
-        }else{
+        }
+
+        if($codigoVerificacao !== $chave){
 
             return back()->with('status', 'verification-link-erro');
 
