@@ -9,6 +9,7 @@ use App\Models\Corretor;
 use App\Models\Imovel;
 use Illuminate\Http\Request;
 use App\Models\Visita;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class VisitaController extends Controller
@@ -48,7 +49,7 @@ class VisitaController extends Controller
         $emailcorretor = $visita->corretor->email ? $visita->corretor->email : null;
         $emailcliente = $visita->cliente->email ? $visita->cliente->email : null;
 
-        $dataVisita = \Carbon\Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');        
+        $dataVisita = Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');        
 
         if ($visita and $emailcorretor != null) {           
 
