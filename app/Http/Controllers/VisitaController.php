@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\VisitaEvent;
 use App\Jobs\ProcessarEnvioEmail;
 use App\Mail\HelloMail;
 use App\Models\Cliente;
@@ -42,46 +43,24 @@ class VisitaController extends Controller
             'data_visita' => 'required|date',
             'status' => 'required',
         ]);
-
+    
         $visita = Visita::create($request->all());
+    
+        if ($visita) {
+            event(new VisitaEvent($visita));
 
-
-        $emailcorretor = $visita->corretor->email ? $visita->corretor->email : null;
-        $emailcliente = $visita->cliente->email ? $visita->cliente->email : null;
-
-        $dataVisita = Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');        
-
-        if ($visita and $emailcorretor != null) {           
-
-            $titulo = 'Olá, '. $visita->corretor->nome .' há nova visita para você!';
-            $mensagem = 'Sua visita está agendada para: ' . $dataVisita . 
-            ' com o cliente: ' . $visita->cliente->nome . 
-            ' no endereço: ' . $visita->imovel->endereco;
-        
-            dispatch(new ProcessarEnvioEmail($emailcorretor, $titulo, $mensagem))->onQueue('low');
         }
-
-        if($visita and $emailcliente != null){
-
-            $titulo = 'Olá, '. $visita->cliente->nome .' há nova visita para você!';
-            $mensagem = 'Sua visita está agendada para: ' . $dataVisita . 
-            ' com o Corretor ' . $visita->corretor->nome . 
-            ' no endereço: ' . $visita->imovel->endereco;
-       
-            dispatch(new ProcessarEnvioEmail($emailcliente, $titulo, $mensagem))->onQueue('low');
-        }
-
+    
         return redirect()->route('visita')
             ->with('success', 'Visita criada com sucesso.');
     }
+    
 
     public function edit(Visita $visita)
     {
         $corretores = Corretor::all();
         $clientes = Cliente::all();
         $imoveis = Imovel::all();
-
-
 
         return view('visita.edit', compact('visita', 'corretores', 'clientes', 'imoveis'));
     }
@@ -98,6 +77,10 @@ class VisitaController extends Controller
             'status' => 'required',
         ]);
 
+        if($request->status == 'NÃO REALIZADO'){            
+            event(new VisitaEvent($visita));
+        }
+
         $visita->update($request->all());
 
         return redirect()->route('visita')
@@ -105,10 +88,14 @@ class VisitaController extends Controller
     }
 
     public function destroy(Visita $visita)
-    {
+    {                 
+        event(new VisitaEvent($visita));
+        
         $visita->delete();
 
         return redirect()->route('visita')
             ->with('success', 'Visita excluída com sucesso.');
     }
+
+
 }
