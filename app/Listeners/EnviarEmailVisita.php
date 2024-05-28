@@ -24,6 +24,7 @@ class EnviarEmailVisita implements ShouldQueue
     {
 
         $dataVisita = Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');
+        //Email para corretor
         if ($visita->corretor->email) {
             $titulo = 'Nova visita agendada!';
             $mensagem = 'Você tem uma nova visita agendada para: ' . $dataVisita . ' no endereço: ' . $visita->imovel->endereco;
@@ -41,6 +42,7 @@ class EnviarEmailVisita implements ShouldQueue
     {
 
         $dataVisita = Carbon::parse($visita->data_visita)->format('d/m/Y H:i:s');
+        //Email para corretor
         if ($visita->corretor->email) {
             $titulo = 'Visita cancelada!';
             $mensagem = 'A visita agendada para: ' . $dataVisita . ' no endereço: ' . $visita->imovel->endereco . ' foi cancelada.';
